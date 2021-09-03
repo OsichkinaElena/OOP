@@ -18,6 +18,20 @@ class Lecturer (Mentor):
         res = f"Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за лекцию: {average_grade}"
         return res
 
+    def __lt__(self, other):
+        if not isinstance(other, Lecturer):
+            print("Not a Lecturer")
+            return
+        grades_self = []
+        grades_other = []
+        for grade in self.grades.values():
+            grades_self += grade
+        aver_grade_self = sum(grades_self) / len(grades_self)
+        for grade in other.grades.values():
+            grades_other += grade
+        aver_grade_other = sum(grades_other) / len(grades_other)
+        return aver_grade_self < aver_grade_other
+
 class Rewiewer(Mentor):
     def rate_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
@@ -57,27 +71,49 @@ class Student:
         average_grade = sum(grades)/len(grades)
         res = f"Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за домашнее задание: {average_grade}\nКурсы в процессе : {','.join(self.courses_in_progress)} \nЗавершенные курсы: {','.join(self.finished_courses)}"
         return res
+    def __lt__(self, other):
+        if not isinstance(other, Student):
+            print("Not a Student")
+            return
+        grades_self = []
+        grades_other =[]
+        for grade in self.grades.values():
+            grades_self += grade
+        aver_grade_self = sum(grades_self) / len(grades_self)
+        for grade in other.grades.values():
+            grades_other += grade
+        aver_grade_other = sum(grades_other) / len(grades_other)
+        return aver_grade_self < aver_grade_other
 
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
+best_student2 = Student('Elena', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
 best_student.courses_in_progress += ['c+']
+best_student2.courses_in_progress += ['c+']
+
 some_rewiewer = Rewiewer('Some', 'Buddy')
 best_student.finished_courses += ['java']
 
 cool_lector = Lecturer("vasya", "pup")
+cool_lector2 = Lecturer("ivan", "ivanov")
 cool_lector.courses_attached += ['Python']
-cool_lector.courses_attached += ['c+']
+cool_lector2.courses_attached += ['c+']
 best_student.rate_lec(cool_lector, 'Python', 10)
-best_student.rate_lec(cool_lector, 'c+', 10)
-best_student.rate_lec(cool_lector, 'c+', 9)
+best_student.rate_lec(cool_lector2, 'c+', 10)
+best_student.rate_lec(cool_lector2, 'c+', 15)
 best_student.rate_lec(cool_lector, 'Python', 9)
 some_rewiewer.courses_attached += ['Python']
 some_rewiewer.courses_attached += ['c+']
-some_rewiewer.rate_hw(best_student, 'Python', 20)
-some_rewiewer.rate_hw(best_student, 'c+', 20)
+some_rewiewer.rate_hw(best_student, 'Python', 10)
+some_rewiewer.rate_hw(best_student, 'Python', 15)
+some_rewiewer.rate_hw(best_student2, 'c+', 20)
 # print(cool_lector.courses_attached)
 # print(cool_lector.grades)
+# print(cool_lector2.grades)
+# print(cool_lector > cool_lector2 )
 # print(some_rewiewer)
 # print(cool_lector)
-print(best_student)
+# print(best_student.grades)
+# print(best_student2.grades)
+# print(best_student < best_student2)
